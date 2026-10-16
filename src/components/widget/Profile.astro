@@ -22,6 +22,24 @@ const config = profileConfig;
         <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">{config.name}</div>
         <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2 transition"></div>
         <div class="text-center text-neutral-400 mb-2.5 transition">{config.bio}</div>
+        {(config.city || config.email) && (
+            <div class="flex flex-col items-center gap-1.5 mb-3 text-xs text-neutral-600 dark:text-neutral-400 transition">
+                {config.city && (
+                    <div class="flex items-center gap-1.5 max-w-full">
+                        <Icon name="material-symbols:location-on-outline-rounded" class="text-sm text-[var(--primary)] shrink-0" />
+                        <span class="truncate" title={config.city}>{config.city}</span>
+                    </div>
+                )}
+                {config.email && (
+                    <a href={`mailto:${config.email}`}
+                       class="flex items-center gap-1.5 max-w-full hover:text-[var(--primary)] transition group/mail"
+                       title={config.email}>
+                        <Icon name="material-symbols:mail-outline-rounded" class="text-sm text-[var(--primary)] shrink-0 group-hover/mail:scale-110 transition" />
+                        <span class="truncate">{config.email}</span>
+                    </a>
+                )}
+            </div>
+        )}
         <div class="flex flex-wrap gap-2 justify-center mb-1">
             {config.links.length > 1 && config.links.map(item =>
                     <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">

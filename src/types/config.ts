@@ -64,6 +64,8 @@ export type ProfileConfig = {
 	avatar?: string;
 	name: string;
 	bio?: string;
+	city?: string;
+	email?: string;
 	links: {
 		name: string;
 		url: string;
