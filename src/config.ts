@@ -60,7 +60,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/demo-avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+	avatar: "assets/images/avatar.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "chen ll",
 	bio: "5 年大前端 + 1 年 AI 协同全栈研发 | 专注全链路交付、复杂中台与 AI Agent 落地",
 	city: "中国 · 杭州",
