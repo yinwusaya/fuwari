@@ -43,7 +43,10 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
-		LinkPreset.About,
+		{
+			name: "项目",
+			url: "/projects/",
+		},
 		{
 			name: "简历",
 			url: "/resume/",
@@ -59,8 +62,8 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/demo-avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "chen ll",
-	bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	city: "Hangzhou, China",
+	bio: "5 年大前端 + 1 年 AI 协同全栈研发 | 专注全链路交付、复杂中台与 AI Agent 落地",
+	city: "中国 · 杭州",
 	email: "xkkzy1@gmail.com",
 	links: [
 		{

@@ -86,6 +86,13 @@ onMount(async () => {
 </script>
 
 <div class="card-base px-8 py-6">
+    {#if groups.length === 0}
+        <div class="text-center py-12 text-50 flex flex-col items-center justify-center gap-2">
+            <div class="text-3xl">📭</div>
+            <div class="text-base font-medium">暂无归档文章</div>
+            <div class="text-xs text-neutral-400">文章正在撰写中，敬请期待！</div>
+        </div>
+    {/if}
     {#each groups as group}
         <div>
             <div class="flex flex-row w-full items-center h-[3.75rem]">

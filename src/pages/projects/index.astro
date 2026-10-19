@@ -1,0 +1,174 @@
+---
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+import MainGridLayout from "../../layouts/MainGridLayout.astro";
+import { url } from "../../utils/url-utils";
+
+const rawProjects = await getCollection("projects");
+const projects = rawProjects.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const categories = ["全部", ...Array.from(new Set(projects.map((p) => p.data.category).filter(Boolean)))];
+---
+
+<MainGridLayout title="项目展示" description="精选工程实践与项目案例，涵盖企业级系统、跨端开发与开源工具。">
+    <div class="flex flex-col gap-6 w-full">
+        <!-- 页面标题卡片 -->
+        <div class="card-base p-6 md:p-8 onload-animation">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="p-2 rounded-xl bg-[var(--primary)]/10 text-[var(--primary)]">
+                    <Icon name="material-symbols:terminal-rounded" class="text-3xl" />
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-90">精选项目 & 作品集</h1>
+                    <p class="text-sm text-50 mt-1">展示企业级系统架构、跨端工程实践与个人开源工具。</p>
+                </div>
+            </div>
+
+            <!-- 分类过滤器 -->
+            {categories.length > 1 && (
+                <div class="flex flex-wrap gap-2 mt-5 pt-4 border-t border-black/5 dark:border-white/5" id="category-filter">
+                    {categories.map((cat, idx) => (
+                        <button
+                            type="button"
+                            data-category={cat}
+                            class:list={[
+                                "category-btn px-3.5 py-1.5 rounded-lg text-sm font-medium transition cursor-pointer",
+                                idx === 0 
+                                    ? "bg-[var(--primary)] text-white shadow-sm" 
+                                    : "bg-[var(--btn-regular-bg)] text-75 hover:bg-[var(--btn-plain-bg-hover)]"
+                            ]}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+
+        <!-- 项目卡片列表 -->
+        <div class="flex flex-col gap-6" id="projects-grid">
+            {projects.map((project, idx) => (
+                <article
+                    data-category={project.data.category}
+                    class="project-card card-base p-6 md:p-8 onload-animation hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                    style={`animation-delay: ${100 + idx * 80}ms`}
+                >
+                    <div>
+                        <!-- 卡片顶部：分类与外链 -->
+                        <div class="flex items-center justify-between gap-4 mb-3">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-[var(--primary)]/10 text-[var(--primary)]">
+                                <Icon name="material-symbols:folder-open-outline-rounded" class="text-sm" />
+                                {project.data.category}
+                            </span>
+                            <div class="flex items-center gap-2">
+                                {project.data.repoUrl && (
+                                    <a
+                                        href={project.data.repoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="p-1.5 rounded-lg text-50 hover:text-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] transition"
+                                        title="查看源码"
+                                    >
+                                        <Icon name="fa6-brands:github" class="text-lg" />
+                                    </a>
+                                )}
+                                {project.data.demoUrl && (
+                                    <a
+                                        href={project.data.demoUrl.startsWith('/') ? url(project.data.demoUrl) : project.data.demoUrl}
+                                        target={project.data.demoUrl.startsWith('/') ? null : "_blank"}
+                                        rel="noopener noreferrer"
+                                        class="p-1.5 rounded-lg text-50 hover:text-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] transition"
+                                        title="在线演示"
+                                    >
+                                        <Icon name="material-symbols:open-in-new-rounded" class="text-lg" />
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+
+                        <!-- 项目标题 -->
+                        <h2 class="text-xl md:text-2xl font-bold mb-2.5 text-90 hover:text-[var(--primary)] transition">
+                            <a href={url(`/projects/${project.id}/`)} class="group flex items-center gap-2">
+                                <span>{project.data.title}</span>
+                                <Icon name="material-symbols:arrow-outward-rounded" class="text-lg opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition duration-200" />
+                            </a>
+                        </h2>
+
+                        <!-- 项目简介 -->
+                        <p class="text-75 text-sm md:text-base leading-relaxed mb-4">
+                            {project.data.description}
+                        </p>
+
+                        <!-- 亮点列表 -->
+                        {project.data.highlights && project.data.highlights.length > 0 && (
+                            <ul class="space-y-1.5 mb-5 text-sm text-75 pl-1">
+                                {project.data.highlights.map((item) => (
+                                    <li class="flex items-start gap-2">
+                                        <Icon name="material-symbols:check-circle-outline-rounded" class="text-[var(--primary)] text-base shrink-0 mt-0.5" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    <!-- 卡片底部：标签与详情按钮 -->
+                    <div class="pt-4 border-t border-black/5 dark:border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <!-- 技术标签 -->
+                        <div class="flex flex-wrap gap-1.5">
+                            {project.data.tags.map((tag) => (
+                                <span class="text-xs px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-neutral-600 dark:text-neutral-300 font-mono">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+
+                        <!-- 详情链接 -->
+                        <a
+                            href={url(`/projects/${project.id}/`)}
+                            class="btn-regular px-4 py-2 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1.5 shrink-0 self-end sm:self-auto active:scale-95 transition"
+                        >
+                            <span>项目详情</span>
+                            <Icon name="material-symbols:chevron-right-rounded" class="text-base" />
+                        </a>
+                    </div>
+                </article>
+            ))}
+        </div>
+    </div>
+</MainGridLayout>
+
+<script>
+    function setupFilter() {
+        const filterContainer = document.getElementById("category-filter");
+        if (!filterContainer) return;
+
+        const buttons = filterContainer.querySelectorAll<HTMLButtonElement>(".category-btn");
+        const cards = document.querySelectorAll<HTMLElement>(".project-card");
+
+        buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const targetCat = btn.getAttribute("data-category");
+
+                buttons.forEach((b) => {
+                    b.classList.remove("bg-[var(--primary)]", "text-white", "shadow-sm");
+                    b.classList.add("bg-[var(--btn-regular-bg)]", "text-75");
+                });
+                btn.classList.add("bg-[var(--primary)]", "text-white", "shadow-sm");
+                btn.classList.remove("bg-[var(--btn-regular-bg)]", "text-75");
+
+                cards.forEach((card) => {
+                    const cardCat = card.getAttribute("data-category");
+                    if (targetCat === "全部" || cardCat === targetCat) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            });
+        });
+    }
+
+    setupFilter();
+    document.addEventListener("swup:enable", setupFilter);
+</script>

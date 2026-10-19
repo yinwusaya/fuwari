@@ -9,6 +9,13 @@ let delay = 0;
 const interval = 50;
 ---
 <div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
+    {page.data.length === 0 && (
+        <div class="card-base p-12 text-center text-50 flex flex-col items-center justify-center gap-3">
+            <div class="text-3xl">✍️</div>
+            <div class="text-base font-medium">暂无文章</div>
+            <div class="text-xs text-neutral-400">博主正在整理技术沉淀与博客文章，你可以先在上方导航查看“项目”与“简历”。</div>
+        </div>
+    )}
     {page.data.map((entry: CollectionEntry<"posts">) => (
         <PostCard
                 entry={entry}

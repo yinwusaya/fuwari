@@ -26,7 +26,22 @@ const specCollection = defineCollection({
 	loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/spec" }),
 	schema: z.object({}),
 });
+const projectsCollection = defineCollection({
+	loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/projects" }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		image: z.string().optional().default(""),
+		category: z.string().optional().default("企业级商业项目"),
+		tags: z.array(z.string()).optional().default([]),
+		order: z.number().optional().default(0),
+		highlights: z.array(z.string()).optional().default([]),
+		demoUrl: z.string().optional().default(""),
+		repoUrl: z.string().optional().default(""),
+	}),
+});
 export const collections = {
 	posts: postsCollection,
 	spec: specCollection,
+	projects: projectsCollection,
 };
